@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stupidy Blog 2.0</title>
+  <title>Stupidy Blog 4.0</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -49,6 +49,7 @@
       background: #ffe0b2;
       padding: 1rem;
       border-radius: 8px;
+      margin-top: 1rem;
     }
 
     input[type=text], textarea {
@@ -78,6 +79,20 @@
       padding: 1rem;
       margin: 0.5rem 0;
       border-radius: 8px;
+      position: relative;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: brown;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
     }
 
     footer {
@@ -92,8 +107,8 @@
 <body>
 
 <header>
-  <h1>Stupidy Blog 2.0</h1>
-  <p>Onde a estupidez é elevada à arte! 🎨</p>
+  <h1>Stupidy Blog 4.0</h1>
+  <p>Where stupidity becomes an everlasting art! 🎨</p>
 </header>
 
 <nav>
@@ -107,67 +122,121 @@
 
   <section id="newsroom">
     <h2>Newsroom</h2>
-    <p>Últimas notícias tão absurdas que talvez sejam reais.</p>
+    <p>The latest absurd news that might actually be true.</p>
+    <div class="comment-section" id="newsroom-comments">
+      <h3>Comments (<span class="count">0</span>)</h3>
+      <form onsubmit="postComment(event, 'newsroom')">
+        <input type="text" id="name-newsroom" placeholder="Your name" required><br>
+        <textarea id="comment-newsroom" placeholder="Write your nonsense here..." required></textarea><br>
+        <input type="submit" value="Post Comment">
+      </form>
+      <div class="comments"></div>
+    </div>
   </section>
 
   <section id="stupid-advise">
     <h2>Stupid Advise</h2>
-    <p>Dicas para melhorar (ou piorar) seu cotidiano.</p>
+    <p>Tips to improve (or ruin) your daily life.</p>
+    <div class="comment-section" id="advise-comments">
+      <h3>Comments (<span class="count">0</span>)</h3>
+      <form onsubmit="postComment(event, 'advise')">
+        <input type="text" id="name-advise" placeholder="Your name" required><br>
+        <textarea id="comment-advise" placeholder="Write your questionable advice..." required></textarea><br>
+        <input type="submit" value="Post Comment">
+      </form>
+      <div class="comments"></div>
+    </div>
   </section>
 
   <section id="stupid-fashion">
     <h2>Stupid Fashion</h2>
-    <p>Trends que fariam qualquer fashionista chorar.</p>
+    <p>Trends that would make any fashionista cry.</p>
+    <div class="comment-section" id="fashion-comments">
+      <h3>Comments (<span class="count">0</span>)</h3>
+      <form onsubmit="postComment(event, 'fashion')">
+        <input type="text" id="name-fashion" placeholder="Your name" required><br>
+        <textarea id="comment-fashion" placeholder="Describe your outfit nightmare..." required></textarea><br>
+        <input type="submit" value="Post Comment">
+      </form>
+      <div class="comments"></div>
+    </div>
   </section>
 
   <section id="wild-ideas">
     <h2>Wild Ideas</h2>
-    <p>Projetos inovadores. Rir é permitido, tentar é obrigatório.</p>
-  </section>
-
-  <section id="comments">
-    <h2>Deixe seu comentário!</h2>
-    <form id="commentForm">
-      <label for="nome">Nome:</label><br>
-      <input type="text" id="nome" name="nome" required><br><br>
-      
-      <label for="comentario">Comentário:</label><br>
-      <textarea id="comentario" name="comentario" rows="4" required></textarea><br><br>
-      
-      <input type="submit" value="Enviar">
-    </form>
-
-    <div class="comments" id="commentsSection">
-      <!-- Comentários vão aparecer aqui -->
+    <p>Innovative projects. Laughing allowed, trying mandatory.</p>
+    <div class="comment-section" id="ideas-comments">
+      <h3>Comments (<span class="count">0</span>)</h3>
+      <form onsubmit="postComment(event, 'ideas')">
+        <input type="text" id="name-ideas" placeholder="Your name" required><br>
+        <textarea id="comment-ideas" placeholder="Share your crazy idea..." required></textarea><br>
+        <input type="submit" value="Post Comment">
+      </form>
+      <div class="comments"></div>
     </div>
   </section>
 
 </main>
 
 <footer>
-  <p>© 2025 Stupidy Blog - Criado com memes e café ☕😂</p>
+  <p>© 2025 Stupidy Blog - Made with memes, caffeine, and now memory! ☕😂</p>
 </footer>
 
 <script>
-  const form = document.getElementById('commentForm');
-  const commentsSection = document.getElementById('commentsSection');
+function postComment(event, section) {
+  event.preventDefault();
+  
+  const nameField = document.getElementById(`name-${section}`);
+  const commentField = document.getElementById(`comment-${section}`);
+  const commentSection = document.querySelector(`#${section}-comments .comments`);
 
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita recarregar a página
+  if (nameField.value.trim() && commentField.value.trim()) {
+    const commentObj = {
+      name: nameField.value,
+      text: commentField.value,
+      id: Date.now()
+    };
 
-    const nome = document.getElementById('nome').value;
-    const comentario = document.getElementById('comentario').value;
+    // Save comment
+    let comments = JSON.parse(localStorage.getItem(`comments-${section}`)) || [];
+    comments.push(commentObj);
+    localStorage.setItem(`comments-${section}`, JSON.stringify(comments));
 
-    if (nome.trim() !== '' && comentario.trim() !== '') {
-      const commentDiv = document.createElement('div');
-      commentDiv.classList.add('comment');
-      commentDiv.innerHTML = `<strong>${nome}</strong>:<br>${comentario}`;
-      commentsSection.appendChild(commentDiv);
+    renderComments(section);
 
-      // Limpa o formulário
-      form.reset();
-    }
+    nameField.value = '';
+    commentField.value = '';
+  }
+}
+
+function deleteComment(section, id) {
+  let comments = JSON.parse(localStorage.getItem(`comments-${section}`)) || [];
+  comments = comments.filter(comment => comment.id !== id);
+  localStorage.setItem(`comments-${section}`, JSON.stringify(comments));
+  renderComments(section);
+}
+
+function renderComments(section) {
+  const commentSection = document.querySelector(`#${section}-comments .comments`);
+  const countSpan = document.querySelector(`#${section}-comments .count`);
+  commentSection.innerHTML = '';
+
+  let comments = JSON.parse(localStorage.getItem(`comments-${section}`)) || [];
+  comments.forEach(comment => {
+    const commentDiv = document.createElement('div');
+    commentDiv.classList.add('comment');
+    commentDiv.innerHTML = `<strong>${comment.name}</strong>:<br>${comment.text}
+      <button class="delete-btn" onclick="deleteComment('${section}', ${comment.id})">Delete</button>`;
+    commentSection.appendChild(commentDiv);
   });
+
+  countSpan.innerText = comments.length;
+}
+
+// Initialize comments on page load
+['newsroom', 'advise', 'fashion', 'ideas'].forEach(section => {
+  renderComments(section);
+});
 </script>
 
 </body>
