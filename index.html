@@ -3,60 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Site Stupidy</title>
+  <title>Stupidy Blog 2.0</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff8e1;
+    }
+
+    header {
+      background-color: purple;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    nav {
+      background-color: orange;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      color: green;
+    }
+
+    form {
+      background: #ffe0b2;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    input[type=text], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type=submit] {
+      background-color: red;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .comments {
+      margin-top: 2rem;
+    }
+
+    .comment {
+      background-color: #e1bee7;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+    }
+
+    footer {
+      background-color: brown;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>Bem-vindo ao Stupidy Blog!</h1>
-    <p>Onde a criatividade é obrigatória e o bom senso é opcional!</p>
-  </header>
+<header>
+  <h1>Stupidy Blog 2.0</h1>
+  <p>Onde a estupidez é elevada à arte! 🎨</p>
+</header>
 
-  <nav>
-    <ul>
-      <li><a href="#newsroom">Newsroom</a></li>
-      <li><a href="#stupid-advise">Stupid Advise</a></li>
-      <li><a href="#stupid-fashion">Stupid Fashion</a></li>
-      <li><a href="#wild-ideas">Wild Ideas</a></li>
-    </ul>
-  </nav>
+<nav>
+  <a href="#newsroom">Newsroom</a>
+  <a href="#stupid-advise">Stupid Advise</a>
+  <a href="#stupid-fashion">Stupid Fashion</a>
+  <a href="#wild-ideas">Wild Ideas</a>
+</nav>
 
-  <main>
-    <section id="newsroom">
-      <h2>Newsroom</h2>
-      <p>Últimas notícias absurdas e totalmente confiáveis (só que não).</p>
-    </section>
+<main>
 
-    <section id="stupid-advise">
-      <h2>Stupid Advise</h2>
-      <p>Conselhos práticos para situações em que nem Deus explica.</p>
-    </section>
+  <section id="newsroom">
+    <h2>Newsroom</h2>
+    <p>Últimas notícias tão absurdas que talvez sejam reais.</p>
+  </section>
 
-    <section id="stupid-fashion">
-      <h2>Stupid Fashion</h2>
-      <p>Inspiração de moda para quem acha que ser diferente é pouco!</p>
-    </section>
+  <section id="stupid-advise">
+    <h2>Stupid Advise</h2>
+    <p>Dicas para melhorar (ou piorar) seu cotidiano.</p>
+  </section>
 
-    <section id="wild-ideas">
-      <h2>Wild Ideas</h2>
-      <p>Ideias geniais, ou desastrosas. Vai saber.</p>
-    </section>
+  <section id="stupid-fashion">
+    <h2>Stupid Fashion</h2>
+    <p>Trends que fariam qualquer fashionista chorar.</p>
+  </section>
 
-    <section id="comments">
-      <h2>Deixe seu comentário!</h2>
-      <form>
-        <label for="nome">Nome:</label><br>
-        <input type="text" id="nome" name="nome"><br><br>
-        <label for="comentario">Comentário:</label><br>
-        <textarea id="comentario" name="comentario" rows="4" cols="50"></textarea><br><br>
-        <input type="submit" value="Enviar">
-      </form>
-    </section>
-  </main>
+  <section id="wild-ideas">
+    <h2>Wild Ideas</h2>
+    <p>Projetos inovadores. Rir é permitido, tentar é obrigatório.</p>
+  </section>
 
-  <footer>
-    <p>© 2025 Stupidy Blog. Feito com criatividade e café ☕</p>
-  </footer>
+  <section id="comments">
+    <h2>Deixe seu comentário!</h2>
+    <form id="commentForm">
+      <label for="nome">Nome:</label><br>
+      <input type="text" id="nome" name="nome" required><br><br>
+      
+      <label for="comentario">Comentário:</label><br>
+      <textarea id="comentario" name="comentario" rows="4" required></textarea><br><br>
+      
+      <input type="submit" value="Enviar">
+    </form>
+
+    <div class="comments" id="commentsSection">
+      <!-- Comentários vão aparecer aqui -->
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2025 Stupidy Blog - Criado com memes e café ☕😂</p>
+</footer>
+
+<script>
+  const form = document.getElementById('commentForm');
+  const commentsSection = document.getElementById('commentsSection');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita recarregar a página
+
+    const nome = document.getElementById('nome').value;
+    const comentario = document.getElementById('comentario').value;
+
+    if (nome.trim() !== '' && comentario.trim() !== '') {
+      const commentDiv = document.createElement('div');
+      commentDiv.classList.add('comment');
+      commentDiv.innerHTML = `<strong>${nome}</strong>:<br>${comentario}`;
+      commentsSection.appendChild(commentDiv);
+
+      // Limpa o formulário
+      form.reset();
+    }
+  });
+</script>
 
 </body>
 </html>
