@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stupidy Blog 4.0</title>
+  <title>Stupidy Blog 5.0</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -107,8 +107,8 @@
 <body>
 
 <header>
-  <h1>Stupidy Blog 4.0</h1>
-  <p>Where stupidity becomes an everlasting art! 🎨</p>
+  <h1>Stupidy Blog 5.0</h1>
+  <p>Where stupidity is forever! 🎨</p>
 </header>
 
 <nav>
@@ -122,73 +122,51 @@
 
   <section id="newsroom">
     <h2>Newsroom</h2>
-    <p>The latest absurd news that might actually be true.</p>
-    <div class="comment-section" id="newsroom-comments">
-      <h3>Comments (<span class="count">0</span>)</h3>
-      <form onsubmit="postComment(event, 'newsroom')">
-        <input type="text" id="name-newsroom" placeholder="Your name" required><br>
-        <textarea id="comment-newsroom" placeholder="Write your nonsense here..." required></textarea><br>
-        <input type="submit" value="Post Comment">
-      </form>
-      <div class="comments"></div>
-    </div>
+    <p>The latest absurd news that could actually be real.</p>
   </section>
 
   <section id="stupid-advise">
     <h2>Stupid Advise</h2>
-    <p>Tips to improve (or ruin) your daily life.</p>
-    <div class="comment-section" id="advise-comments">
-      <h3>Comments (<span class="count">0</span>)</h3>
-      <form onsubmit="postComment(event, 'advise')">
-        <input type="text" id="name-advise" placeholder="Your name" required><br>
-        <textarea id="comment-advise" placeholder="Write your questionable advice..." required></textarea><br>
-        <input type="submit" value="Post Comment">
-      </form>
-      <div class="comments"></div>
-    </div>
+    <p>Advice that might improve or ruin your life dramatically.</p>
   </section>
 
   <section id="stupid-fashion">
     <h2>Stupid Fashion</h2>
-    <p>Trends that would make any fashionista cry.</p>
-    <div class="comment-section" id="fashion-comments">
-      <h3>Comments (<span class="count">0</span>)</h3>
-      <form onsubmit="postComment(event, 'fashion')">
-        <input type="text" id="name-fashion" placeholder="Your name" required><br>
-        <textarea id="comment-fashion" placeholder="Describe your outfit nightmare..." required></textarea><br>
-        <input type="submit" value="Post Comment">
-      </form>
-      <div class="comments"></div>
-    </div>
+    <p>Trends to make fashion experts cry rivers.</p>
   </section>
 
   <section id="wild-ideas">
     <h2>Wild Ideas</h2>
-    <p>Innovative projects. Laughing allowed, trying mandatory.</p>
-    <div class="comment-section" id="ideas-comments">
-      <h3>Comments (<span class="count">0</span>)</h3>
-      <form onsubmit="postComment(event, 'ideas')">
-        <input type="text" id="name-ideas" placeholder="Your name" required><br>
-        <textarea id="comment-ideas" placeholder="Share your crazy idea..." required></textarea><br>
-        <input type="submit" value="Post Comment">
-      </form>
-      <div class="comments"></div>
+    <p>Crazy ideas that might just work (or explode).</p>
+  </section>
+
+  <section id="comments">
+    <h2>Community Comments</h2>
+    <h3>Total Comments: <span id="comment-count">0</span></h3>
+    <form id="commentForm">
+      <input type="text" id="name" placeholder="Your name" required><br>
+      <textarea id="comment" placeholder="Leave your crazy thoughts here..." required></textarea><br>
+      <input type="submit" value="Post Comment">
+    </form>
+
+    <div class="comments" id="commentsSection">
+      <!-- Comments will be inserted here -->
     </div>
   </section>
 
 </main>
 
 <footer>
-  <p>© 2025 Stupidy Blog - Made with memes, caffeine, and now memory! ☕😂</p>
+  <p>© 2025 Stupidy Blog - Powered by memes, caffeine, and localStorage ☕😂</p>
 </footer>
 
 <script>
-function postComment(event, section) {
+function postComment(event) {
   event.preventDefault();
   
-  const nameField = document.getElementById(`name-${section}`);
-  const commentField = document.getElementById(`comment-${section}`);
-  const commentSection = document.querySelector(`#${section}-comments .comments`);
+  const nameField = document.getElementById('name');
+  const commentField = document.getElementById('comment');
+  const commentSection = document.getElementById('commentsSection');
 
   if (nameField.value.trim() && commentField.value.trim()) {
     const commentObj = {
@@ -198,35 +176,35 @@ function postComment(event, section) {
     };
 
     // Save comment
-    let comments = JSON.parse(localStorage.getItem(`comments-${section}`)) || [];
+    let comments = JSON.parse(localStorage.getItem('stupidy-comments')) || [];
     comments.push(commentObj);
-    localStorage.setItem(`comments-${section}`, JSON.stringify(comments));
+    localStorage.setItem('stupidy-comments', JSON.stringify(comments));
 
-    renderComments(section);
+    renderComments();
 
     nameField.value = '';
     commentField.value = '';
   }
 }
 
-function deleteComment(section, id) {
-  let comments = JSON.parse(localStorage.getItem(`comments-${section}`)) || [];
+function deleteComment(id) {
+  let comments = JSON.parse(localStorage.getItem('stupidy-comments')) || [];
   comments = comments.filter(comment => comment.id !== id);
-  localStorage.setItem(`comments-${section}`, JSON.stringify(comments));
-  renderComments(section);
+  localStorage.setItem('stupidy-comments', JSON.stringify(comments));
+  renderComments();
 }
 
-function renderComments(section) {
-  const commentSection = document.querySelector(`#${section}-comments .comments`);
-  const countSpan = document.querySelector(`#${section}-comments .count`);
+function renderComments() {
+  const commentSection = document.getElementById('commentsSection');
+  const countSpan = document.getElementById('comment-count');
   commentSection.innerHTML = '';
 
-  let comments = JSON.parse(localStorage.getItem(`comments-${section}`)) || [];
+  let comments = JSON.parse(localStorage.getItem('stupidy-comments')) || [];
   comments.forEach(comment => {
     const commentDiv = document.createElement('div');
     commentDiv.classList.add('comment');
     commentDiv.innerHTML = `<strong>${comment.name}</strong>:<br>${comment.text}
-      <button class="delete-btn" onclick="deleteComment('${section}', ${comment.id})">Delete</button>`;
+      <button class="delete-btn" onclick="deleteComment(${comment.id})">Delete</button>`;
     commentSection.appendChild(commentDiv);
   });
 
@@ -234,9 +212,8 @@ function renderComments(section) {
 }
 
 // Initialize comments on page load
-['newsroom', 'advise', 'fashion', 'ideas'].forEach(section => {
-  renderComments(section);
-});
+document.getElementById('commentForm').addEventListener('submit', postComment);
+renderComments();
 </script>
 
 </body>
