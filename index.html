@@ -3,11 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Site Stupidy</title>
+  <title>Stupidy Timeline</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff8e1;
+    }
+    header {
+      background: #6a1b9a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .tabs {
+      margin-top: 1rem;
+    }
+    .tab-button {
+      margin: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    #timeline {
+      padding: 2rem;
+    }
+    .story {
+      background: white;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .story h3 {
+      margin-top: 0;
+    }
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 0.5rem 1rem;
+      background: #ef6c00;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Bem-vindo ao Stupidy World!</h1>
-  <p>Este é o meu primeiro site simples. E já é estúpido o suficiente para ser incrível!</p>
-  <p>Feito com amor, café e um pouco de falta de noção. ☕🤪</p>
+  <header>
+    <h1>Stupidy Blog Timeline</h1>
+    <div class="tabs">
+      <button class="tab-button" data-category="newsroom" style="background-color: green; color: white;">Newsroom</button>
+      <button class="tab-button" data-category="stupid_advise" style="background-color: yellow; color: black;">Stupid Advise</button>
+      <button class="tab-button" data-category="stupid_fashion" style="background-color: purple; color: white;">Stupid Fashion</button>
+    </div>
+  </header>
+
+  <main id="timeline">
+    <!-- Histórias vão aparecer aqui -->
+  </main>
+
+  <button id="back-to-top">Voltar pro Topo</button>
+
+  <script>
+    const stories = {
+      newsroom: [
+        { title: "Banana é declarada patrimônio histórico", date: "2025-04-01", text: "Em decisão unânime, a cidade de Bananal agora é oficialmente protegida contra a falta de bananas." },
+        { title: "Prefeitura distribui patinetes voadores", date: "2025-04-15", text: "Após problemas com patinetes normais, agora é a vez dos modelos voadores causarem o caos aéreo." }
+      ],
+      stupid_advise: [
+        { title: "Como espantar vizinhos chatos", date: "2025-04-10", text: "Comece a cantar ópera às 3h da manhã usando um megafone. Resultados em até 3 dias!" },
+        { title: "Economize água tomando banho de glitter", date: "2025-04-20", text: "Sujeira some na purpurina. E você ainda brilha!" }
+      ],
+      stupid_fashion: [
+        { title: "Moda 2025: Chinelo com meia e terno", date: "2025-04-05", text: "Nada diz 'estou confortável e poderoso' como uma boa meia esportiva combinada com seu melhor Armani." },
+        { title: "Tendência: Camiseta do Super-Homem com gravata", date: "2025-04-18", text: "Misture heroísmo com formalidade. Ideal para entrevistas de emprego." }
+      ]
+    };
+
+    const timeline = document.getElementById('timeline');
+    const buttons = document.querySelectorAll('.tab-button');
+
+    function renderStories(category) {
+      timeline.innerHTML = '';
+      stories[category].forEach(story => {
+        const storyDiv = document.createElement('div');
+        storyDiv.className = 'story';
+        storyDiv.innerHTML = `<h3>${story.title}</h3><small>${story.date}</small><p>${story.text}</p>`;
+        timeline.appendChild(storyDiv);
+      });
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        renderStories(category);
+      });
+    });
+
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Carregar Newsroom inicialmente
+    renderStories('newsroom');
+  </script>
 </body>
 </html>
