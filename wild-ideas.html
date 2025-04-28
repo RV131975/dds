@@ -5,22 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wild Ideas - Stupidy Blog</title>
   <style>
-    body { background: #ffe0b2; font-family: Arial; padding: 2rem; }
-    h1 { color: red; }
-    a { color: purple; text-decoration: none; }
-    .comment { background: #ffcc80; padding: 1rem; margin: 1rem 0; border-radius: 8px; }
-    .delete-btn { background: darkred; color: white; border: none; padding: 0.3rem 0.6rem; margin-left: 1rem; }
+    body {
+      background: linear-gradient(135deg, #ffd600, #ff6d00, #d500f9, #2979ff, #00e676);
+      background-size: 500% 500%;
+      animation: gradientMove 15s ease infinite;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding: 3rem;
+      color: white;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-30px); }
+      60% { transform: translateY(-15px); }
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    a {
+      display: inline-block;
+      margin: 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background: white;
+      color: black;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    a:hover {
+      background: yellow;
+      transform: rotate(5deg) scale(1.1);
+    }
+
+    form {
+      background: rgba(255,255,255,0.8);
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 8px;
+      color: black;
+    }
+
+    input[type=text], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .comment {
+      background: #ffffff99;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 8px;
+      color: black;
+    }
+
+    .delete-btn {
+      background: darkred;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h1>Wild Ideas</h1>
-  <p>Crazy ideas that might (or might not) change the world! 🚀🤪</p>
+
+  <h1>🚀 Wild Ideas 🚀</h1>
+  <p>Where crazy meets genius! 💡🌪️</p>
   <a href="index.html">← Back to Home</a>
 
-  <h2>Comments</h2>
+  <h2>Unleash your madness:</h2>
   <form id="form">
-    <input type="text" id="name" placeholder="Your name" required><br><br>
-    <textarea id="comment" placeholder="Share your wildest ideas..." required></textarea><br><br>
+    <input type="text" id="name" placeholder="Your name" required><br>
+    <textarea id="comment" placeholder="What insane idea do you have?" required></textarea><br>
     <button type="submit">Post</button>
   </form>
 
@@ -51,7 +140,7 @@
       comments.forEach(c => {
         const div = document.createElement('div');
         div.className = 'comment';
-        div.innerHTML = `<strong>${c.name}</strong>: ${c.comment} <button class="delete-btn" onclick="deleteComment(${c.id})">Delete</button>`;
+        div.innerHTML = `<strong>${c.name}</strong>: ${c.comment}<br><button class="delete-btn" onclick="deleteComment(${c.id})">Delete</button>`;
         commentsDiv.appendChild(div);
       });
     }
@@ -65,5 +154,6 @@
 
     renderComments();
   </script>
+
 </body>
 </html>
