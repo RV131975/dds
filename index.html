@@ -3,21 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stupidy Blog - Home</title>
+  <title>Welcome to the Stupidy Blog!</title>
   <style>
-    body { text-align: center; background: #fff8e1; font-family: Arial; padding: 2rem; }
-    h1 { color: purple; }
-    a { display: block; margin: 1rem; font-size: 1.5rem; color: orange; text-decoration: none; }
-    a:hover { color: red; }
+    body {
+      background: linear-gradient(135deg, #ffeb3b, #ff5722, #8bc34a, #00bcd4, #e91e63);
+      background-size: 500% 500%;
+      animation: gradientMove 15s ease infinite;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding: 3rem;
+      color: white;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-30px); }
+      60% { transform: translateY(-15px); }
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    a {
+      display: inline-block;
+      margin: 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      background: white;
+      color: black;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    a:hover {
+      background: yellow;
+      transform: rotate(5deg) scale(1.1);
+    }
+
+    .emoji {
+      font-size: 2rem;
+      animation: spin 5s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    footer {
+      margin-top: 4rem;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>Welcome to the Stupidy Blog!</h1>
-  <p>Choose your category of chaos:</p>
 
-  <a href="newsroom.html">Newsroom</a>
-  <a href="stupid-advise.html">Stupid Advise</a>
-  <a href="stupid-fashion.html">Stupid Fashion</a>
-  <a href="wild-ideas.html">Wild Ideas</a>
+  <h1>Welcome to the ✨ Stupidy Blog ✨</h1>
+  <p>Your daily dose of bad ideas, questionable advice, and weird fashion statements! 🤪💥</p>
+
+  <div>
+    <a href="newsroom.html">📰 Newsroom</a>
+    <a href="stupid-advise.html">🤯 Stupid Advise</a>
+    <a href="stupid-fashion.html">👗 Stupid Fashion</a>
+    <a href="wild-ideas.html">🚀 Wild Ideas</a>
+  </div>
+
+  <footer>
+    <p>Made with 2% intelligence and 98% pure chaos. ☕🎉🦄</p>
+  </footer>
+
 </body>
 </html>
