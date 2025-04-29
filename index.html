@@ -14,27 +14,33 @@
       padding: 2rem;
       color: white;
     }
+
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     h1 {
       font-size: 3rem;
       margin-bottom: 1rem;
       animation: bounce 2s infinite;
     }
+
     @keyframes bounce {
       0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
       40% { transform: translateY(-30px); }
       60% { transform: translateY(-15px); }
     }
+
     .cards {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
+      margin-top: 2rem;
     }
+
     .card {
       background: rgba(255,255,255,0.9);
       color: black;
@@ -43,11 +49,38 @@
       border-radius: 15px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
+
     .card img {
       width: 100%;
       border-radius: 15px;
       margin-top: 0.5rem;
     }
+
+    #refreshButton {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+    }
+
+    #refreshButton:hover {
+      background: yellow;
+      transform: scale(1.1);
+    }
+
+    #message {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #ffff00;
+      display: none;
+    }
+
     footer {
       margin-top: 4rem;
       font-size: 1rem;
@@ -61,13 +94,17 @@
 
   <div class="cards" id="cards"></div>
 
+  <button id="refreshButton">🔄 Refresh Posts</button>
+
+  <div id="message">✅ New posts loaded!</div>
+
   <footer>
     <p>Made with 2% intelligence and 98% pure chaos. ☕🎉🦄<br>© 2024 Daily Dose of Stupidity</p>
   </footer>
 
   <script>
-    const folderId = '1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6'; // SEU ID DE PASTA
-    const apiKey = 'AIzaSyDXNuPVvlacDePsfDXNCqFzDm27h0V_-CE'; // SUA API KEY DO GOOGLE CLOUD AQUI
+    const folderId = '1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6'; // ID da sua pasta no Google Drive
+    const apiKey = 'AIzaSyDXNuPVvlacDePsfDXNCqFzDm27h0V_-CE'; // Sua API Key do Google Cloud
 
     async function loadPostsFromDrive() {
       const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
@@ -75,7 +112,7 @@
       const data = await response.json();
       const cardsDiv = document.getElementById('cards');
 
-      if (data.files.length === 0) {
+      if (!data.files || data.files.length === 0) {
         cardsDiv.innerHTML = `<p>No posts found! Upload something to the Drive folder. 📂</p>`;
         return;
       }
@@ -95,11 +132,33 @@
             <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">View File 📄</a>
           `;
         }
-
         cardsDiv.appendChild(card);
       });
+
+      // Mostra mensagem depois de carregar
+      document.getElementById('message').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('message').style.display = 'none';
+      }, 3000);
     }
 
+    async function refreshPosts() {
+      const cardsDiv = document.getElementById('cards');
+      const refreshButton = document.getElementById('refreshButton');
+
+      refreshButton.disabled = true;
+      refreshButton.innerText = '🔄 Updating...';
+
+      cardsDiv.innerHTML = '';
+      await loadPostsFromDrive();
+
+      refreshButton.disabled = false;
+      refreshButton.innerText = '🔄 Refresh Posts';
+    }
+
+    document.getElementById('refreshButton').addEventListener('click', refreshPosts);
+
+    // Carregar os posts na primeira vez
     loadPostsFromDrive();
   </script>
 
