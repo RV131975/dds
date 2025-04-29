@@ -71,8 +71,8 @@
 
   <script>
     async function loadPostsFromDrive() {
-      const folderId = "PASTE_YOUR_FOLDER_ID_HERE"; // 1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6?usp=drive_link
-      const apiKey = "PASTE_YOUR_API_KEY_HERE"; // mystic-impulse-417501
+      const folderId = "1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6?usp=drive_link"; // 
+      const apiKey = "mystic-impulse-417501"; // 
       const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webViewLink)`;
       const response = await fetch(url);
       const data = await response.json();
