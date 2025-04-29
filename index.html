@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Dose of Stupidity - Powered by Drive</title>
+  <title>Daily Dose of Stupidity - Drive Edition</title>
   <style>
     body {
       background: linear-gradient(135deg, #ffeb3b, #ff5722, #8bc34a, #00bcd4, #e91e63);
@@ -33,21 +33,47 @@
       60% { transform: translateY(-15px); }
     }
 
-    .post {
-      background: rgba(255,255,255,0.9);
+    .filter-buttons {
+      margin: 2rem 0;
+    }
+    .filter-buttons button {
+      margin: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      background: white;
       color: black;
-      margin: 1rem auto;
-      padding: 1rem;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 600px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .filter-buttons button:hover {
+      background: yellow;
+      transform: scale(1.1);
     }
 
-    .post img {
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.9);
+      color: black;
+      width: 300px;
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      display: none;
+    }
+
+    .card img {
       width: 100%;
       border-radius: 15px;
-      margin-top: 1rem;
+      margin-top: 0.5rem;
     }
 
     footer {
@@ -61,49 +87,79 @@
   <h1>✨ Daily Dose of Stupidity ✨</h1>
   <p>Your daily portal to epic fails, bad advice, and questionable fashion!</p>
 
-  <div id="posts">
-    <h2>Latest Updates</h2>
+  <div class="filter-buttons">
+    <button onclick="filterPosts('all')">Show All</button>
+    <button onclick="filterPosts('memes')">😂 Memes</button>
+    <button onclick="filterPosts('fails')">🤕 Fails</button>
+    <button onclick="filterPosts('advise')">🤯 Advise</button>
+    <button onclick="filterPosts('fashion')">👗 Fashion</button>
+    <button onclick="filterPosts('wildideas')">🚀 Wild Ideas</button>
   </div>
+
+  <div class="cards" id="cards"></div>
 
   <footer>
     <p>Made with 2% intelligence and 98% pure chaos. ☕🎉🦄<br>© 2024 Daily Dose of Stupidity</p>
   </footer>
 
   <script>
-    async function loadPostsFromDrive() {
-      const folderId = "1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6?usp=drive_link"; // 
-      const apiKey = "mystic-impulse-417501"; // 
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webViewLink)`;
-      const response = await fetch(url);
-      const data = await response.json();
-      const postsDiv = document.getElementById('posts');
+    const folderIDs = {
+      memes: 'ID_DA_PASTA_MEMES',
+      fails: 'ID_DA_PASTA_FAILS',
+      advise: 'ID_DA_PASTA_ADVISE',
+      fashion: 'ID_DA_PASTA_FASHION',
+      wildideas: 'ID_DA_PASTA_WILDIDEAS'
+    };
 
-      if (data.files.length === 0) {
-        postsDiv.innerHTML += `<p>No posts found! Upload something to the Drive folder. 📂</p>`;
-        return;
+    const apiKey = 'SUA_API_KEY_AQUI';
+
+    async function loadPosts() {
+      const cardsContainer = document.getElementById('cards');
+
+      for (const [category, folderId] of Object.entries(folderIDs)) {
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        data.files.forEach(file => {
+          const card = document.createElement('div');
+          card.className = `card ${category}`;
+
+          if (file.mimeType.startsWith('image/')) {
+            card.innerHTML = `
+              <h3>${file.name}</h3>
+              <img src="https://drive.google.com/uc?id=${file.id}" alt="${file.name}">
+            `;
+          } else {
+            card.innerHTML = `
+              <h3>${file.name}</h3>
+              <a href="https://drive.google.com/uc?id=${file.id}" target="_blank">View File</a>
+            `;
+          }
+          cardsContainer.appendChild(card);
+        });
       }
 
-      data.files.forEach(file => {
-        const postDiv = document.createElement('div');
-        postDiv.className = 'post';
+      showAllCards();
+    }
 
-        if (file.mimeType.startsWith('image/')) {
-          postDiv.innerHTML = `
-            <p><strong>${file.name}</strong></p>
-            <img src="https://drive.google.com/uc?id=${file.id}" alt="${file.name}">
-          `;
-        } else {
-          postDiv.innerHTML = `
-            <p><strong>${file.name}</strong></p>
-            <a href="${file.webViewLink}" target="_blank">View File 📄</a>
-          `;
-        }
-
-        postsDiv.appendChild(postDiv);
+    function showAllCards() {
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.display = 'block';
       });
     }
 
-    loadPostsFromDrive();
+    function filterPosts(category) {
+      document.querySelectorAll('.card').forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    loadPosts();
   </script>
 
 </body>
