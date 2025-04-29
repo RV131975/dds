@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Daily Dose of Stupidity!!!</title>
+  <title>Daily Dose of Stupidity - Powered by Drive</title>
   <style>
     body {
       background: linear-gradient(135deg, #ffeb3b, #ff5722, #8bc34a, #00bcd4, #e91e63);
@@ -11,7 +11,7 @@
       animation: gradientMove 15s ease infinite;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
-      padding: 3rem;
+      padding: 2rem;
       color: white;
     }
 
@@ -33,38 +33,21 @@
       60% { transform: translateY(-15px); }
     }
 
-    p {
-      font-size: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
-    a {
-      display: inline-block;
-      margin: 1rem;
-      padding: 1rem 2rem;
-      font-size: 1.5rem;
-      background: white;
+    .post {
+      background: rgba(255,255,255,0.9);
       color: black;
-      border-radius: 50px;
-      text-decoration: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      transition: transform 0.3s, background 0.3s;
+      margin: 1rem auto;
+      padding: 1rem;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
-    a:hover {
-      background: yellow;
-      transform: rotate(5deg) scale(1.1);
-    }
-
-    .emoji {
-      font-size: 2rem;
-      animation: spin 5s linear infinite;
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .post img {
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 1rem;
     }
 
     footer {
@@ -75,19 +58,54 @@
 </head>
 <body>
 
-  <h1>Welcome to ✨ Daily Dose of Stupidity!✨</h1>
-  <p>Your daily dose of bad ideas, questionable advice, and weird fashion statements! 🤪💥</p>
+  <h1>✨ Daily Dose of Stupidity ✨</h1>
+  <p>Your daily portal to epic fails, bad advice, and questionable fashion!</p>
 
-  <div>
-    <a href="newsroom.html">📰 Newsroom</a>
-    <a href="stupid-advise.html">🤯 Stupid Advise</a>
-    <a href="stupid-fashion.html">👗 Stupid Fashion</a>
-    <a href="wild-ideas.html">🚀 Wild Ideas</a>
+  <div id="posts">
+    <h2>Latest Updates</h2>
   </div>
 
   <footer>
-    <p>Made with 2% intelligence and 98% pure chaos. ☕🎉🦄</p>
+    <p>Made with 2% intelligence and 98% pure chaos. ☕🎉🦄<br>© 2024 Daily Dose of Stupidity</p>
   </footer>
+
+  <script>
+    async function loadPostsFromDrive() {
+      const folderId = "PASTE_YOUR_FOLDER_ID_HERE"; // <- Coloque o ID da sua pasta pública aqui
+      const apiKey = "PASTE_YOUR_API_KEY_HERE"; // <- Coloque sua API Key do Google aqui
+
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink,webViewLink)`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const postsDiv = document.getElementById('posts');
+
+      if (data.files.length === 0) {
+        postsDiv.innerHTML += `<p>No posts found! Upload something to the Drive folder. 📂</p>`;
+        return;
+      }
+
+      data.files.forEach(file => {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+
+        if (file.mimeType.startsWith('image/')) {
+          postDiv.innerHTML = `
+            <p><strong>${file.name}</strong></p>
+            <img src="https://drive.google.com/uc?id=${file.id}" alt="${file.name}">
+          `;
+        } else {
+          postDiv.innerHTML = `
+            <p><strong>${file.name}</strong></p>
+            <a href="${file.webViewLink}" target="_blank">View File 📄</a>
+          `;
+        }
+
+        postsDiv.appendChild(postDiv);
+      });
+    }
+
+    loadPostsFromDrive();
+  </script>
 
 </body>
 </html>
