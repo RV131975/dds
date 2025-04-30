@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Dose of Stupidity - Pinterest Style</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Dose of Stupidity - Drive Edition</title>
   <style>
     body {
       background: linear-gradient(135deg, #ffeb3b, #ff5722, #8bc34a, #00bcd4, #e91e63);
@@ -49,12 +49,32 @@
       border-radius: 15px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       break-inside: avoid;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s ease forwards;
+      animation-delay: var(--delay, 0s);
     }
 
     .card img {
       width: 100%;
       border-radius: 15px;
       margin-top: 0.5rem;
+    }
+
+    .card pre {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 10px;
+      color: #222;
+      white-space: pre-wrap;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     #refreshButton {
@@ -82,22 +102,38 @@
       display: none;
     }
 
+    #topButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 0.8rem 1rem;
+      background: #ffffffcc;
+      color: black;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      cursor: pointer;
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #topButton.show {
+      display: block;
+      opacity: 1;
+    }
+
     footer {
       margin-top: 4rem;
       font-size: 1rem;
     }
 
-    /* RESPONSIVO */
     @media (max-width: 768px) {
-      #cards {
-        column-count: 2;
-      }
+      #cards { column-count: 2; }
     }
 
     @media (max-width: 480px) {
-      #cards {
-        column-count: 1;
-      }
+      #cards { column-count: 1; }
     }
   </style>
 </head>
@@ -109,16 +145,17 @@
   <div id="cards"></div>
 
   <button id="refreshButton">🔄 Refresh Posts</button>
-
   <div id="message">✅ New posts loaded!</div>
+
+  <button id="topButton" onclick="scrollToTop()">⬆️ Top</button>
 
   <footer>
     <p>Made with 2% intelligence and 98% pure chaos. ☕🎉🦄<br>© 2024 Daily Dose of Stupidity</p>
   </footer>
 
   <script>
-    const folderId = '1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6'; // ID da sua pasta Drive
-    const apiKey = 'AIzaSyDXNuPVvlacDePsfDXNCqFzDm27h0V_-CE'; // Sua API Key
+    const folderId = '1046dyZJXfOyi7-ddMoLzsGvROOVqvfG6';
+    const apiKey = 'AIzaSyDXNuPVvlacDePsfDXNCqFzDm27h0V_-CE';
 
     async function loadPostsFromDrive() {
       const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
@@ -131,21 +168,33 @@
         return;
       }
 
-      data.files.forEach(file => {
+      data.files.forEach((file, index) => {
         const card = document.createElement('div');
         card.className = 'card';
+        card.style.setProperty('--delay', `${index * 0.1}s`);
 
         if (file.mimeType.startsWith('image/')) {
           card.innerHTML = `
             <h3>${file.name}</h3>
             <img src="https://drive.google.com/uc?id=${file.id}" alt="${file.name}">
           `;
+        } else if (file.mimeType === "text/plain" || file.name.endsWith(".txt") || file.name.endsWith(".md")) {
+          const contentUrl = `https://www.googleapis.com/drive/v3/files/${file.id}?alt=media&key=${apiKey}`;
+          fetch(contentUrl)
+            .then(res => res.text())
+            .then(text => {
+              card.innerHTML = `
+                <h3>${file.name}</h3>
+                <pre>${text}</pre>
+              `;
+            });
         } else {
           card.innerHTML = `
             <h3>${file.name}</h3>
             <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">View File 📄</a>
           `;
         }
+
         cardsDiv.appendChild(card);
       });
 
@@ -161,17 +210,28 @@
 
       refreshButton.disabled = true;
       refreshButton.innerText = '🔄 Updating...';
-
       cardsDiv.innerHTML = '';
+
       await loadPostsFromDrive();
 
       refreshButton.disabled = false;
       refreshButton.innerText = '🔄 Refresh Posts';
     }
 
-    document.getElementById('refreshButton').addEventListener('click', refreshPosts);
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-    // Carregar os posts automaticamente na primeira vez
+    window.addEventListener("scroll", () => {
+      const btn = document.getElementById("topButton");
+      if (window.scrollY > 300) {
+        btn.classList.add("show");
+      } else {
+        btn.classList.remove("show");
+      }
+    });
+
+    document.getElementById('refreshButton').addEventListener('click', refreshPosts);
     loadPostsFromDrive();
   </script>
 
